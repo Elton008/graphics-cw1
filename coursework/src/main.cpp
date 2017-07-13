@@ -17,29 +17,38 @@ texture dissolve;
 float dissolve_factor = 1.0f;
 vec2 uv_scroll;
 map<string, mesh> meshes;
-
-
-
+texture plane_tex;
+mesh plane_mesh;
+vec3 pos(0.0f, 0.0f, 0.0f);
 
 bool load_content() {
 
-	meshes["plane"] = mesh(geometry_builder::create_plane());
-
+	plane_mesh = mesh(geometry_builder::create_plane());
+	//meshes ["plane"] = mesh(geometry_builder::create_plane());
 	
+	//m = mesh(geometry_builder::create_sphere(20, 20));
+	//m.get_transform().scale = vec3(10.0f);
+	//m.get_transform().translate(vec3(-25.0f, 10.0f, -25.0f));
+
 	// Create mesh object, cheating and using the mesh builder for now
 	m = mesh(geometry_builder::create_box());
 	// Scale geometry
-	m.get_transform().scale = vec3(10.0f);
+	m.get_transform().scale = vec3(20.0f);
 	
 
 	// Load in dissolve shader
 	eff.add_shader("shaders/dissolve.vert", GL_VERTEX_SHADER);
 	eff.add_shader("shaders/dissolve.frag", GL_FRAGMENT_SHADER);
 
+	//eff.add_shader("27_Texturing_Shader/simple_texture.vert", GL_VERTEX_SHADER);
+	//eff.add_shader("27_Texturing_Shader/simple_texture.frag", GL_FRAGMENT_SHADER);
+
 	// Build effect
 	eff.build();
 
 	// Load in textures
+	//tex[plane_mesh] = texture("textures/night clouds 1.jpg");
+	plane_tex = texture("textures/night clouds 1.jpg");
 	tex = texture("textures/blue_sky.jpg");
 	dissolve = texture("textures/world-blend-map.png");
 
@@ -56,8 +65,14 @@ bool update(float delta_time) {
 	// Use up an down to modify the dissolve factor
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_UP))
 		dissolve_factor = clamp(dissolve_factor + 0.1f * delta_time, 0.0f, 1.0f);
+
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_DOWN))
 		dissolve_factor = clamp(dissolve_factor - 0.1f * delta_time, 0.0f, 1.0f);
+
+	
+	// Rotate the sphere
+	//meshes["sphere"].get_transform().rotate(vec3(0.0f, half_pi<float>(), 0.0f) * delta_time);
+
 	// Update camera
 	cam.update(delta_time);
 	uv_scroll += vec2(0, delta_time * 0.05);
@@ -66,6 +81,7 @@ bool update(float delta_time) {
 
 bool render() {
 	// Bind effect
+
 	renderer::bind(eff);
 
 	// Create MVP matrix
@@ -98,6 +114,11 @@ bool render() {
 	glUniform2fv(eff.get_uniform_location("UV_SCROLL"), 1, value_ptr(uv_scroll));
 	// Render the mesh
 	renderer::render(m);
+
+	//glUniformMatrix4fv(eff.get_uniform_location(plane_tex.get_transform().get_transform_matrix());
+	// Bind floor texture
+	renderer::bind(plane_tex, 0);
+	renderer::render(plane_mesh);
 
 	return true;
 }

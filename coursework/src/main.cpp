@@ -13,10 +13,11 @@ vec3 pos(0.0f, 0.0f, 0.0f);
 float dissolve_factor = 1.0f;
 vec2 uv_scroll;
 texture dissolve;
-
+effect eff1;
 bool load_content() {
 	// Create plane mesh
 	meshes["plane"] = mesh(geometry_builder::create_plane());
+
 
 	// Create scene
 	meshes["box"] = mesh(geometry_builder::create_box());
@@ -30,19 +31,20 @@ bool load_content() {
 	meshes["pyramid2"] = mesh(geometry_builder::create_pyramid());
 	meshes["pyramid3"] = mesh(geometry_builder::create_pyramid());
 
-	/*/meshes["tetra"] = mesh(geometry_builder::create_tetrahedron());
-	meshes["pyramid"] = mesh(geometry_builder::create_pyramid());
-	meshes["disk"] = mesh(geometry_builder::create_disk(20));
-	meshes["cylinder"] = mesh(geometry_builder::create_cylinder(20, 20));
-	meshes["sphere"] = mesh(geometry_builder::create_sphere(20, 20));
-	meshes["torus"] = mesh(geometry_builder::create_torus(20, 20, 1.0f, 5.0f));
-/*/
+	meshes["box_wall1"] = mesh(geometry_builder::create_box());
+	meshes["box_wall2"] = mesh(geometry_builder::create_box());
+	meshes["box_wall3"] = mesh(geometry_builder::create_box());
+	meshes["box_wall4"] = mesh(geometry_builder::create_box());
+	meshes["box_wall5"] = mesh(geometry_builder::create_box());
+
+	
 	// Transform objects
 	meshes["box"].get_transform().scale = vec3(10.0f, 10.0f, 10.0f);
 	meshes["box"].get_transform().translate(vec3(0.0f, 2.5f, 0.0f));
 
 	meshes["sphere"].get_transform().scale = vec3(4.5f, 4.5f, 4.5f);
 	meshes["sphere"].get_transform().translate(vec3(0.0f, 17.5f, 0.0f));
+	meshes["sphere"].get_transform().rotate(vec3(half_pi<float>(), 3.0f, 0.0f));
 
 	meshes["box2"].get_transform().scale = vec3(10.0f, 20.0f, 10.0f);
 	meshes["box2"].get_transform().translate(vec3(-30.0f, 2.5f, 30.0f));
@@ -69,42 +71,41 @@ bool load_content() {
 	meshes["pyramid3"].get_transform().translate(vec3(-30.0f, 17.5f, -30.0f));
 
 	
+	meshes["box_wall1"].get_transform().scale = vec3(5.0f, 15.0f, 60.0f);
+    meshes["box_wall1"].get_transform().translate(vec3(-30.0f, 2.5f, 0.0f));
+
+	meshes["box_wall2"].get_transform().scale = vec3(5.0f, 15.0f, 15.0f);
+	meshes["box_wall2"].get_transform().translate(vec3(30.0f, 2.5f, 20.0f));
+
+	meshes["box_wall3"].get_transform().scale = vec3(60.0f, 15.0f, 5.0f);
+	meshes["box_wall3"].get_transform().translate(vec3(0.0f, 2.5f, -30.0f));
+
+	meshes["box_wall4"].get_transform().scale = vec3(60.0f, 15.0f, 5.0f);
+	meshes["box_wall4"].get_transform().translate(vec3(0.0f, 2.5f, 30.0f));
+
+	meshes["box_wall5"].get_transform().scale = vec3(5.0f, 15.0f, 15.0f);
+	meshes["box_wall5"].get_transform().translate(vec3(30.0f, 2.5f, -20.0f));
 
 
-	/*/meshes["tetra"].get_transform().scale = vec3(4.0f, 4.0f, 4.0f);
-	meshes["tetra"].get_transform().translate(vec3(-30.0f, 10.0f, -10.0f));
-	meshes["pyramid"].get_transform().scale = vec3(5.0f, 5.0f, 5.0f);
-	meshes["pyramid"].get_transform().translate(vec3(-10.0f, 7.5f, -30.0f));
-	meshes["disk"].get_transform().scale = vec3(3.0f, 1.0f, 3.0f);
-	meshes["disk"].get_transform().translate(vec3(-10.0f, 11.5f, -30.0f));
-	meshes["disk"].get_transform().rotate(vec3(half_pi<float>(), 0.0f, 0.0f));
-	meshes["cylinder"].get_transform().scale = vec3(5.0f, 5.0f, 5.0f);
-	meshes["cylinder"].get_transform().translate(vec3(-25.0f, 2.5f, -25.0f));
-	meshes["sphere"].get_transform().scale = vec3(2.5f, 2.5f, 2.5f);
-	meshes["sphere"].get_transform().translate(vec3(-25.0f, 10.0f, -25.0f));
-	meshes["torus"].get_transform().translate(vec3(-25.0f, 10.0f, -25.0f));
-	meshes["torus"].get_transform().rotate(vec3(half_pi<float>(), 0.0f, 0.0f));
-/*/
+
 	// Load texture
 	tex = texture("textures/water-06.jpg");
 
-	//meshes["box"] = texture("textures/water-06.jpg");
-
-	//plane_tex = texture("textures/night clouds 1.jpg");
-	//tex = texture("textures/blue_sky.jpg");
-	dissolve = texture("textures/world-blend-map.png");
+    dissolve = texture("textures/world-blend-map.png");
 
 
 	// Load in shaders
-	//eff.add_shader("shaders/simple_texture.vert", GL_VERTEX_SHADER);
-	//eff.add_shader("shaders/simple_texture.frag", GL_FRAGMENT_SHADER);
-
+	
 	eff.add_shader("shaders/dissolve.vert", GL_VERTEX_SHADER);
 	eff.add_shader("shaders/dissolve.frag", GL_FRAGMENT_SHADER);
+
+	eff1.add_shader("shaders/simple_texture.vert", GL_VERTEX_SHADER);
+	eff1.add_shader("shaders/simple_texture.frag", GL_FRAGMENT_SHADER);
 
 
 	// Build effect
 	eff.build();
+	eff1.build();
 
 	// Set camera properties
 	cam.set_position(vec3(50.0f, 50.0f, 50.0f));
@@ -116,32 +117,31 @@ bool load_content() {
 bool update(float delta_time) {
 	// *********************************
 	// Use keyboard to change camera location
-	// 1 - (50, 10, 50)
+	// 1 - (-50, 50, 0)
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_1)) {
 		cam.set_position(vec3(-50.0f, 50.0f, 0.0f));
 	}
 
 	
-
-	// 2 - (-50, 50, 50)
+	// 2 - (50, 10, 50)
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_2)) {
 		cam.set_position(vec3(50.0f, 10.0f, 50.0f));
 	}
 
 
-	// 3 - (-50, 50, -50)
+	// 3 - (50, 10, 0)
 
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_3)) {
-		cam.set_position(vec3(-50.0f, 10.0f, 00.0f));
+		cam.set_position(vec3(50.0f, 10.0f, 00.0f));
 	}
 
-	// 4 - (50, 50, -50)
+	// 4 - (50, 100, -50)
 
 
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_4)) {
 		cam.set_position(vec3(50.0f, 100.0f, -50.0f));
 	}
-	// 5 - ()
+	// 5 - (50, 100, 0)
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_5)) {
 		cam.set_position(vec3(50.0f, 100.0f, 00.0f));
 	}
@@ -202,6 +202,8 @@ bool render() {
 
 		// Render mesh
 		renderer::render(m);
+		renderer::bind(eff1);
+
 	}
 
 	return true;

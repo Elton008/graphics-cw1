@@ -6,6 +6,7 @@ using namespace graphics_framework;
 using namespace glm;
 
 map<string, mesh> meshes;
+map<string, texture> textures;
 effect eff;
 texture tex;
 target_camera cam;
@@ -14,10 +15,23 @@ float dissolve_factor = 1.0f;
 vec2 uv_scroll;
 texture dissolve;
 effect eff1;
+cubemap cube_map;
+mesh skybox;
+effect sky_eff;
+
 bool load_content() {
+
+	skybox = mesh(geometry_builder::create_box());
+	// Scale box by 100
+	skybox.get_transform().scale = vec3(100);
+
 	// Create plane mesh
 	meshes["plane"] = mesh(geometry_builder::create_plane());
 
+	array<string, 6> filenames = { "textures/bluefreeze_rt.tga", "textures/bluefreeze_lf.tga", "textures/bluefreeze_up.tga",
+		"textures/bluefreeze_dn.tga", "textures/bluefreeze_ft.tga", "textures/bluefreeze_bk.tga" };
+
+	cube_map = cubemap(filenames);
 
 	// Create scene
 	meshes["box"] = mesh(geometry_builder::create_box());
@@ -90,7 +104,23 @@ bool load_content() {
 
 	// Load texture
 	tex = texture("textures/water-06.jpg");
+	textures["box"] = texture("textures/wood2.jpg");
+	textures["box2"] = texture("textures/wood_1.jpg");
+	textures["box3"] = texture("textures/wood_1.jpg");
+	textures["box4"] = texture("textures/wood_1.jpg");
+	textures["box5"] = texture("textures/wood_1.jpg");
+	textures["box_wall1"] = texture("textures/Brick-Wal_01.jpg");
+	textures["box_wall2"] = texture("textures/Brick-Wal_01.jpg");
+	textures["box_wall3"] = texture("textures/Brick-Wal_01.jpg");
+	textures["box_wall4"] = texture("textures/Brick-Wal_01.jpg");
+	textures["box_wall5"] = texture("textures/Brick-Wal_01.jpg");
+	textures["plane"] = texture("textures/brick_wall_texture.jpg");
+	textures["pyramid"] = texture("textures/stone floor 2.jpg");
+	textures["pyramid1"] = texture("textures/stone floor 2.jpg");
+	textures["pyramid2"] = texture("textures/stone floor 2.jpg");
+	textures["pyramid3"] = texture("textures/stone floor 2.jpg");
 
+	
     dissolve = texture("textures/world-blend-map.png");
 
 
@@ -102,10 +132,14 @@ bool load_content() {
 	eff1.add_shader("shaders/simple_texture.vert", GL_VERTEX_SHADER);
 	eff1.add_shader("shaders/simple_texture.frag", GL_FRAGMENT_SHADER);
 
+	sky_eff.add_shader("shaders/skybox.vert", GL_VERTEX_SHADER);
+	sky_eff.add_shader("shaders/skybox.frag", GL_FRAGMENT_SHADER);
+	
 
 	// Build effect
 	eff.build();
 	eff1.build();
+	sky_eff.build();
 
 	// Set camera properties
 	cam.set_position(vec3(50.0f, 50.0f, 50.0f));
@@ -115,6 +149,8 @@ bool load_content() {
 }
 
 bool update(float delta_time) {
+
+	skybox.get_transform().position = cam.get_position();
 	// *********************************
 	// Use keyboard to change camera location
 	// 1 - (-50, 50, 0)
@@ -169,41 +205,99 @@ bool update(float delta_time) {
 }
 
 bool render() {
+
+	glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
+	glCullFace(GL_FRONT);
+
+	renderer::bind(sky_eff);
+
+	auto M = skybox.get_transform().get_transform_matrix();
+	auto V = cam.get_view();
+	auto P = cam.get_projection();
+	auto MVP = P*V*M;
+
+	// Set MVP matrix uniform
+	glUniformMatrix4fv(sky_eff.get_uniform_location("MVP"), 1, GL_FALSE, value_ptr(MVP));
+
+	renderer::bind(cube_map, 0);
+
+	renderer::render(skybox);
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glCullFace(GL_BACK);
+
 	// Render meshes
 	for (auto &e : meshes) {
-		auto m = e.second;
-		// Bind effect
-		renderer::bind(eff);
-		// Create MVP matrix
-		auto M = m.get_transform().get_transform_matrix();
-		auto V = cam.get_view();
-		auto P = cam.get_projection();
-		auto MVP = P * V * M;
-		// Set MVP matrix uniform
-		glUniformMatrix4fv(eff.get_uniform_location("MVP"), 1, GL_FALSE, value_ptr(MVP));
+		if (e.first == "sphere") {
+			auto m = e.second;
+			// Bind effect
+			renderer::bind(eff);
+			// Create MVP matrix
+			auto M = m.get_transform().get_transform_matrix();
+			auto V = cam.get_view();
+			auto P = cam.get_projection();
+			auto MVP = P * V * M;
+			// Set MVP matrix uniform
+			glUniformMatrix4fv(eff.get_uniform_location("MVP"), 1, GL_FALSE, value_ptr(MVP));
 
 
-		// Set the dissolve_factor uniform value
-		glUniform1f(eff.get_uniform_location("dissolve_factor"), dissolve_factor);
+			// Set the dissolve_factor uniform value
+			glUniform1f(eff.get_uniform_location("dissolve_factor"), dissolve_factor);
 
-		// Bind and set texture
-		renderer::bind(tex, 0);
-		renderer::bind(dissolve, 1);
+			// Bind and set texture
+			renderer::bind(tex, 0);
+			renderer::bind(dissolve, 1);
 
-		// Set the uniform values for textures - use correct index
-		glUniform1i(eff.get_uniform_location("tex"), 0);
-		glUniform1i(eff.get_uniform_location("dissolve"), 1);
+			// Set the uniform values for textures - use correct index
+			glUniform1i(eff.get_uniform_location("tex"), 0);
+			glUniform1i(eff.get_uniform_location("dissolve"), 1);
 
 
-		// Set UV_scroll uniform, adds cool movent (Protip: This is a super easy way to do fire effects;))
-		glUniform2fv(eff.get_uniform_location("UV_SCROLL"), 1, value_ptr(uv_scroll));
-		// Render the mesh
-		
+			// Set UV_scroll uniform, adds cool movent (Protip: This is a super easy way to do fire effects;))
+			glUniform2fv(eff.get_uniform_location("UV_SCROLL"), 1, value_ptr(uv_scroll));
+			// Render the mesh
 
-		// Render mesh
+
+			// Render mesh
+			renderer::render(m);
+		}
+		else
+		{
+			
+			auto m = e.second;
+			// Bind effect
+			renderer::bind(eff1);
+			
+			// Create MVP matrix
+			auto M = m.get_transform().get_transform_matrix();
+			auto V = cam.get_view();
+			auto P = cam.get_projection();
+			auto MVP = P * V * M;
+			// Set MVP matrix uniform
+			glUniformMatrix4fv(eff1.get_uniform_location("MVP"), 1, GL_FALSE, value_ptr(MVP));
+
+			// Bind and set texture
+			texture t = tex;
+
+			//search for the texture name in textures
+			auto it = textures.find(e.first);
+			if (it != textures.end()) {
+				//we found it!
+				t = textures[e.first];
+			}
+	
+			renderer::bind(t,0);
+			
+			// Set the uniform values for textures - use correct index
+			glUniform1i(eff1.get_uniform_location("tex"), 0);
+			
+			// Render mesh
 		renderer::render(m);
-		renderer::bind(eff1);
+		}
 
+		
 	}
 
 	return true;

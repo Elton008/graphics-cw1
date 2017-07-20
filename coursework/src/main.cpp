@@ -50,14 +50,22 @@ bool load_content() {
 	meshes["box_wall3"] = mesh(geometry_builder::create_box());
 	meshes["box_wall4"] = mesh(geometry_builder::create_box());
 	meshes["box_wall5"] = mesh(geometry_builder::create_box());
-
+	meshes["door1"] = mesh(geometry_builder::create_box());
+	meshes["door2"] = mesh(geometry_builder::create_box());
+	meshes["house"] = mesh(geometry_builder::create_box());
 	
+	meshes["house3"] = mesh(geometry_builder::create_box());
+	meshes["pyramid_roof"] = mesh(geometry_builder::create_pyramid());
+	meshes["house_roof1"] = mesh(geometry_builder::create_pyramid());
+	meshes["house_roof2"] = mesh(geometry_builder::create_pyramid());
+	meshes["house4"] = mesh(geometry_builder::create_box());
+
 	// Transform objects
 	meshes["box"].get_transform().scale = vec3(10.0f, 10.0f, 10.0f);
-	meshes["box"].get_transform().translate(vec3(0.0f, 2.5f, 0.0f));
+	meshes["box"].get_transform().translate(vec3(5.0f, 2.5f, 0.0f));
 
 	meshes["sphere"].get_transform().scale = vec3(4.5f, 4.5f, 4.5f);
-	meshes["sphere"].get_transform().translate(vec3(0.0f, 17.5f, 0.0f));
+	meshes["sphere"].get_transform().translate(vec3(5.0f, 17.5f, 0.0f));
 	meshes["sphere"].get_transform().rotate(vec3(half_pi<float>(), 3.0f, 0.0f));
 
 	meshes["box2"].get_transform().scale = vec3(10.0f, 20.0f, 10.0f);
@@ -100,7 +108,31 @@ bool load_content() {
 	meshes["box_wall5"].get_transform().scale = vec3(5.0f, 15.0f, 15.0f);
 	meshes["box_wall5"].get_transform().translate(vec3(30.0f, 2.5f, -20.0f));
 
+	meshes["door1"].get_transform().scale = vec3(10.0f, 15.0f, 2.0f);
+	meshes["door1"].get_transform().translate(vec3(24.0f, 2.5f, -11.3f));
 
+	meshes["door2"].get_transform().scale = vec3(10.0f, 15.0f, 2.0f);
+	meshes["door2"].get_transform().translate(vec3(24.0f, 2.5f, 11.3f));
+
+	meshes["house"].get_transform().scale = vec3(15.0f, 33.0f, 30.0f);
+	meshes["house"].get_transform().translate(vec3(-12.0f, 2.5f, 0.0f));
+
+	meshes["pyramid_roof"].get_transform().scale = vec3(28.0f, 12.0f, 32.0f);
+	meshes["pyramid_roof"].get_transform().translate(vec3(-12.0f, 25.5f, 0.0f));
+
+	
+
+	meshes["house3"].get_transform().scale = vec3(15.0f, 24.0f, 8.0f);
+	meshes["house3"].get_transform().translate(vec3(12.0f, 2.5f, -20.0f));
+
+	meshes["house4"].get_transform().scale = vec3(15.0f, 24.0f, 8.0f);
+	meshes["house4"].get_transform().translate(vec3(12.0f, 2.5f, 20.0f));
+
+	meshes["house_roof1"].get_transform().scale = vec3(17.0f, 4.0f, 9.0f);
+	meshes["house_roof1"].get_transform().translate(vec3(12.0f, 16.5f, 20.0f));
+
+	meshes["house_roof2"].get_transform().scale = vec3(17.0f, 4.0f, 9.0f);
+	meshes["house_roof2"].get_transform().translate(vec3(12.0f, 16.5f, -20.0f));
 
 	// Load texture
 	tex = texture("textures/water-06.jpg");
@@ -119,6 +151,16 @@ bool load_content() {
 	textures["pyramid1"] = texture("textures/stone floor 2.jpg");
 	textures["pyramid2"] = texture("textures/stone floor 2.jpg");
 	textures["pyramid3"] = texture("textures/stone floor 2.jpg");
+	textures["door1"] = texture("textures/Wood4.jpg");
+	textures["door2"] = texture("textures/Wood4.jpg");
+	textures["house"] = texture("textures/brick_wall01.jpg");
+	textures["pyramid_roof"] = texture("textures/metal roof2.jpg");
+	textures["house_roof1"] = texture("textures/metal roof2.jpg");
+	textures["house_roof2"] = texture("textures/metal roof2.jpg");
+	
+	textures["house3"] = texture("textures/brick_wall01.jpg");
+	textures["house4"] = texture("textures/brick_wall01.jpg");
+
 
 	
     dissolve = texture("textures/world-blend-map.png");

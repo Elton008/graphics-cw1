@@ -23,13 +23,13 @@ bool load_content() {
 
 	skybox = mesh(geometry_builder::create_box());
 	// Scale box by 100
-	skybox.get_transform().scale = vec3(100);
+	skybox.get_transform().scale = vec3(200);
 
 	// Create plane mesh
 	meshes["plane"] = mesh(geometry_builder::create_plane());
 
-	array<string, 6> filenames = { "textures/bluefreeze_rt.tga", "textures/bluefreeze_lf.tga", "textures/bluefreeze_up.tga",
-		"textures/bluefreeze_dn.tga", "textures/bluefreeze_ft.tga", "textures/bluefreeze_bk.tga" };
+	array<string, 6> filenames = { "textures/stratosphere_rt.tga", "textures/stratosphere_lf.tga", "textures/stratosphere_up.tga",
+		"textures/stratosphere_dn.tga", "textures/stratosphere_ft.tga", "textures/stratosphere_bk.tga" };
 
 	cube_map = cubemap(filenames);
 
@@ -62,77 +62,77 @@ bool load_content() {
 
 	// Transform objects
 	meshes["box"].get_transform().scale = vec3(10.0f, 10.0f, 10.0f);
-	meshes["box"].get_transform().translate(vec3(5.0f, 2.5f, 0.0f));
+	meshes["box"].get_transform().translate(vec3(9.0f, 4.5f, 0.0f));
 
 	meshes["sphere"].get_transform().scale = vec3(4.5f, 4.5f, 4.5f);
-	meshes["sphere"].get_transform().translate(vec3(5.0f, 17.5f, 0.0f));
+	meshes["sphere"].get_transform().translate(vec3(9.0f, 17.5f, 0.0f));
 	meshes["sphere"].get_transform().rotate(vec3(half_pi<float>(), 3.0f, 0.0f));
 
 	meshes["box2"].get_transform().scale = vec3(10.0f, 20.0f, 10.0f);
-	meshes["box2"].get_transform().translate(vec3(-30.0f, 2.5f, 30.0f));
+	meshes["box2"].get_transform().translate(vec3(-30.0f, 10.0f, 30.0f));
 
 	meshes["box3"].get_transform().scale = vec3(10.0f, 20.0f, 10.0f);
-	meshes["box3"].get_transform().translate(vec3(30.0f, 2.5f, -30.0f));
+	meshes["box3"].get_transform().translate(vec3(30.0f, 10.0f, -30.0f));
 
 	meshes["box4"].get_transform().scale = vec3(10.0f, 20.0f, 10.0f);
-	meshes["box4"].get_transform().translate(vec3(30.0f, 2.5f, 30.0f));
+	meshes["box4"].get_transform().translate(vec3(30.0f, 10.0f, 30.0f));
 
 	meshes["box5"].get_transform().scale = vec3(10.0f, 20.0f, 10.0f);
-	meshes["box5"].get_transform().translate(vec3(-30.0f, 2.5f, -30.0f));
+	meshes["box5"].get_transform().translate(vec3(-30.0f, 10.0f, -30.0f));
 
-	meshes["pyramid"].get_transform().scale = vec3(10.0f, 10.0f, 10.0f);
-	meshes["pyramid"].get_transform().translate(vec3(-30.0f, 17.5f, 30.0f));
+	meshes["pyramid"].get_transform().scale = vec3(9.0f, 10.0f, 9.0f);
+	meshes["pyramid"].get_transform().translate(vec3(-30.0f, 22.5f, 30.0f));
 
-	meshes["pyramid1"].get_transform().scale = vec3(10.0f, 10.0f, 10.0f);
-	meshes["pyramid1"].get_transform().translate(vec3(30.0f, 17.5f, -30.0f));
+	meshes["pyramid1"].get_transform().scale = vec3(9.0f, 10.0f, 9.0f);
+	meshes["pyramid1"].get_transform().translate(vec3(30.0f, 22.5f, -30.0f));
 
-	meshes["pyramid2"].get_transform().scale = vec3(10.0f, 10.0f, 10.0f);
-	meshes["pyramid2"].get_transform().translate(vec3(30.0f, 17.5f, 30.0f));
+	meshes["pyramid2"].get_transform().scale = vec3(9.0f, 10.0f, 9.0f);
+	meshes["pyramid2"].get_transform().translate(vec3(30.0f, 22.5f, 30.0f));
 
-	meshes["pyramid3"].get_transform().scale = vec3(10.0f, 10.0f, 10.0f);
-	meshes["pyramid3"].get_transform().translate(vec3(-30.0f, 17.5f, -30.0f));
+	meshes["pyramid3"].get_transform().scale = vec3(9.0f, 10.0f, 9.0f);
+	meshes["pyramid3"].get_transform().translate(vec3(-30.0f, 22.5f, -30.0f));
 
 	
-	meshes["box_wall1"].get_transform().scale = vec3(5.0f, 15.0f, 60.0f);
-    meshes["box_wall1"].get_transform().translate(vec3(-30.0f, 2.5f, 0.0f));
+	meshes["box_wall1"].get_transform().scale = vec3(5.0f, 12.0f, 60.0f);
+    meshes["box_wall1"].get_transform().translate(vec3(-30.0f, 6.0f, 0.0f));
 
-	meshes["box_wall2"].get_transform().scale = vec3(5.0f, 15.0f, 15.0f);
-	meshes["box_wall2"].get_transform().translate(vec3(30.0f, 2.5f, 20.0f));
+	meshes["box_wall2"].get_transform().scale = vec3(5.0f, 12.0f, 15.0f);
+	meshes["box_wall2"].get_transform().translate(vec3(30.0f, 6.0f, 20.0f));
 
-	meshes["box_wall3"].get_transform().scale = vec3(60.0f, 15.0f, 5.0f);
-	meshes["box_wall3"].get_transform().translate(vec3(0.0f, 2.5f, -30.0f));
+	meshes["box_wall3"].get_transform().scale = vec3(60.0f, 12.0f, 5.0f);
+	meshes["box_wall3"].get_transform().translate(vec3(0.0f, 6.0f, -30.0f));
 
-	meshes["box_wall4"].get_transform().scale = vec3(60.0f, 15.0f, 5.0f);
-	meshes["box_wall4"].get_transform().translate(vec3(0.0f, 2.5f, 30.0f));
+	meshes["box_wall4"].get_transform().scale = vec3(60.0f, 12.0f, 5.0f);
+	meshes["box_wall4"].get_transform().translate(vec3(0.0f, 6.0f, 30.0f));
 
-	meshes["box_wall5"].get_transform().scale = vec3(5.0f, 15.0f, 15.0f);
-	meshes["box_wall5"].get_transform().translate(vec3(30.0f, 2.5f, -20.0f));
+	meshes["box_wall5"].get_transform().scale = vec3(5.0f, 12.0f, 15.0f);
+	meshes["box_wall5"].get_transform().translate(vec3(30.0f, 6.0f, -20.0f));
 
 	meshes["door1"].get_transform().scale = vec3(10.0f, 15.0f, 2.0f);
-	meshes["door1"].get_transform().translate(vec3(24.0f, 2.5f, -11.3f));
+	meshes["door1"].get_transform().translate(vec3(24.0f, 7.5f, -11.3f));
 
 	meshes["door2"].get_transform().scale = vec3(10.0f, 15.0f, 2.0f);
-	meshes["door2"].get_transform().translate(vec3(24.0f, 2.5f, 11.3f));
+	meshes["door2"].get_transform().translate(vec3(24.0f, 7.5f, 11.3f));
 
-	meshes["house"].get_transform().scale = vec3(15.0f, 33.0f, 30.0f);
-	meshes["house"].get_transform().translate(vec3(-12.0f, 2.5f, 0.0f));
+	meshes["house"].get_transform().scale = vec3(26.0f, 24.0f, 30.0f);
+	meshes["house"].get_transform().translate(vec3(-12.0f, 11.5f, 0.0f));
 
 	meshes["pyramid_roof"].get_transform().scale = vec3(28.0f, 12.0f, 32.0f);
-	meshes["pyramid_roof"].get_transform().translate(vec3(-12.0f, 25.5f, 0.0f));
+	meshes["pyramid_roof"].get_transform().translate(vec3(-12.0f, 30.0f, 0.0f));
 
 	
 
-	meshes["house3"].get_transform().scale = vec3(15.0f, 24.0f, 8.0f);
-	meshes["house3"].get_transform().translate(vec3(12.0f, 2.5f, -20.0f));
+	meshes["house3"].get_transform().scale = vec3(15.0f, 15.0f, 8.0f);
+	meshes["house3"].get_transform().translate(vec3(12.0f, 12.5f, -20.0f));
 
-	meshes["house4"].get_transform().scale = vec3(15.0f, 24.0f, 8.0f);
-	meshes["house4"].get_transform().translate(vec3(12.0f, 2.5f, 20.0f));
+	meshes["house4"].get_transform().scale = vec3(15.0f, 15.0f, 8.0f);
+	meshes["house4"].get_transform().translate(vec3(12.0f, 12.5f, 20.0f));
 
 	meshes["house_roof1"].get_transform().scale = vec3(17.0f, 4.0f, 9.0f);
-	meshes["house_roof1"].get_transform().translate(vec3(12.0f, 16.5f, 20.0f));
+	meshes["house_roof1"].get_transform().translate(vec3(12.0f, 22.0f, 20.0f));
 
 	meshes["house_roof2"].get_transform().scale = vec3(17.0f, 4.0f, 9.0f);
-	meshes["house_roof2"].get_transform().translate(vec3(12.0f, 16.5f, -20.0f));
+	meshes["house_roof2"].get_transform().translate(vec3(12.0f, 22.0f, -20.0f));
 
 	// Load texture
 	tex = texture("textures/water-06.jpg");
@@ -184,49 +184,54 @@ bool load_content() {
 	sky_eff.build();
 
 	// Set camera properties
-	cam.set_position(vec3(50.0f, 50.0f, 50.0f));
+	cam.set_position(vec3(100.0f, 50.0f, 50.0f));
 	cam.set_target(vec3(0.0f, 1.0f, 0.0f));
 	cam.set_projection(quarter_pi<float>(), renderer::get_screen_aspect(), 0.1f, 1000.0f);
 	return true;
 }
 
+
 bool update(float delta_time) {
+	
+	
 
 	skybox.get_transform().position = cam.get_position();
 	// *********************************
 	// Use keyboard to change camera location
-	// 1 - (-50, 50, 0)
+		
+	// 1 - (80.0f, 50.0f, 0.0f)
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_1)) {
-		cam.set_position(vec3(-50.0f, 50.0f, 0.0f));
+		cam.set_position(vec3(120.0f, 30.0f, 0.0f));
 	}
 
-	
-	// 2 - (50, 10, 50)
+	// 2 - (50.0f, 50.0f, -50.0f)
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_2)) {
-		cam.set_position(vec3(50.0f, 10.0f, 50.0f));
+		cam.set_position(vec3(90.0f, 50.0f, -50.0f));
 	}
-
-
-	// 3 - (50, 10, 0)
-
+	
+	// 3 - (0.0f, 50.0f, -80.0f)
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_3)) {
-		cam.set_position(vec3(50.0f, 10.0f, 00.0f));
+		cam.set_position(vec3(0.0f, 50.0f, -110.0f));
 	}
 
-	// 4 - (50, 100, -50)
-
-
+	// 4 - (-50.0f, 50.0f, -70.0f)
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_4)) {
-		cam.set_position(vec3(50.0f, 100.0f, -50.0f));
-	}
-	// 5 - (50, 100, 0)
-	if (glfwGetKey(renderer::get_window(), GLFW_KEY_5)) {
-		cam.set_position(vec3(50.0f, 100.0f, 00.0f));
+		cam.set_position(vec3(-50.0f, 50.0f, -90.0f));
 	}
 
-	//0 - (50, 50, 50) default
+	// 5 - (-80.0f, 70.0f, 0.0f)
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_5)) {
+		cam.set_position(vec3(-90.0f, 70.0f, 0.0f));
+	}
+	
+	// 6 - (50, 90, 0)
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_6)) {
+		cam.set_position(vec3(50.0f, 90.0f, 0.0f));
+	}
+
+	// 0 - (50, 50, 50) DEFAULT POSITION
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_0)) {
-		cam.set_position(vec3(50.0f, 50.0f, 50.0f));
+		cam.set_position(vec3(100.0f, 50.0f, 50.0f));
 	}
 
 

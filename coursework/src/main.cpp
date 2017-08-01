@@ -24,12 +24,12 @@ bool load_content() {
 	skybox = mesh(geometry_builder::create_box());
 	// Scale box by 100
 	skybox.get_transform().scale = vec3(200);
-
+	 
 	// Create plane mesh
 	meshes["plane"] = mesh(geometry_builder::create_plane());
 
-	array<string, 6> filenames = { "textures/stratosphere_rt.tga", "textures/stratosphere_lf.tga", "textures/stratosphere_up.tga",
-		"textures/stratosphere_dn.tga", "textures/stratosphere_ft.tga", "textures/stratosphere_bk.tga" };
+	array<string, 6> filenames = { "textures/stratosphere_ft.tga", "textures/stratosphere_bk.tga", "textures/stratosphere_up.tga",
+		"textures/stratosphere_dn.tga", "textures/stratosphere_rt.tga", "textures/stratosphere_lf.tga" };
 
 	cube_map = cubemap(filenames);
 
@@ -118,7 +118,7 @@ bool load_content() {
 	meshes["house"].get_transform().translate(vec3(-12.0f, 11.5f, 0.0f));
 
 	meshes["pyramid_roof"].get_transform().scale = vec3(28.0f, 12.0f, 32.0f);
-	meshes["pyramid_roof"].get_transform().translate(vec3(-12.0f, 30.0f, 0.0f));
+	meshes["pyramid_roof"].get_transform().translate(vec3(-12.0f, 29.0f, 0.0f));
 
 	
 

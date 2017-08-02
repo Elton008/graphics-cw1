@@ -80,16 +80,16 @@ bool load_content() {
 	meshes["box5"].get_transform().scale = vec3(10.0f, 20.0f, 10.0f);
 	meshes["box5"].get_transform().translate(vec3(-30.0f, 10.0f, -30.0f));
 
-	meshes["pyramid"].get_transform().scale = vec3(9.0f, 10.0f, 9.0f);
+	meshes["pyramid"].get_transform().scale = vec3(6.0f, 8.0f, 6.0f);
 	meshes["pyramid"].get_transform().translate(vec3(-30.0f, 22.5f, 30.0f));
 
-	meshes["pyramid1"].get_transform().scale = vec3(9.0f, 10.0f, 9.0f);
+	meshes["pyramid1"].get_transform().scale = vec3(6.0f, 8.0f, 6.0f);
 	meshes["pyramid1"].get_transform().translate(vec3(30.0f, 22.5f, -30.0f));
 
-	meshes["pyramid2"].get_transform().scale = vec3(9.0f, 10.0f, 9.0f);
+	meshes["pyramid2"].get_transform().scale = vec3(6.0f, 8.0f, 6.0f);
 	meshes["pyramid2"].get_transform().translate(vec3(30.0f, 22.5f, 30.0f));
 
-	meshes["pyramid3"].get_transform().scale = vec3(9.0f, 10.0f, 9.0f);
+	meshes["pyramid3"].get_transform().scale = vec3(6.0f, 8.0f, 6.0f);
 	meshes["pyramid3"].get_transform().translate(vec3(-30.0f, 22.5f, -30.0f));
 
 	
@@ -233,6 +233,11 @@ bool update(float delta_time) {
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_0)) {
 		cam.set_position(vec3(100.0f, 50.0f, 50.0f));
 	}
+
+	meshes["pyramid"].get_transform().rotate(vec3(0.0f, half_pi<float>(), 0.0f) * delta_time);
+	meshes["pyramid1"].get_transform().rotate(vec3(0.0f, half_pi<float>(), 0.0f) * delta_time);
+	meshes["pyramid2"].get_transform().rotate(vec3(0.0f, half_pi<float>(), 0.0f) * delta_time);
+	meshes["pyramid3"].get_transform().rotate(vec3(0.0f, half_pi<float>(), 0.0f) * delta_time);
 
 
 	// Use up an down to modify the dissolve factor

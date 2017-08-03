@@ -15,9 +15,11 @@ float dissolve_factor = 1.0f;
 vec2 uv_scroll;
 texture dissolve;
 effect eff1;
+effect eff2;
 cubemap cube_map;
 mesh skybox;
 effect sky_eff;
+directional_light light;
 
 bool load_content() {
 
@@ -165,6 +167,16 @@ bool load_content() {
 	
     dissolve = texture("textures/world-blend-map.png");
 
+	// Set lighting values
+	// ambient intensity (0.3, 0.3, 0.3)
+	light.set_ambient_intensity(vec4(0.3f, 0.3f, 0.3f, 1.0f));
+	// Light colour white
+	light.set_light_colour(vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	// Light direction (1.0, 1.0, -1.0)
+	light.set_direction(vec3(1.0, 1.0, -1.0));
+	// Load in shaders
+	eff2.add_shader("shaders/gouraud.vert", GL_VERTEX_SHADER);
+	eff2.add_shader("shaders/gouraud.frag", GL_FRAGMENT_SHADER);
 
 	// Load in shaders
 	
@@ -176,12 +188,15 @@ bool load_content() {
 
 	sky_eff.add_shader("shaders/skybox.vert", GL_VERTEX_SHADER);
 	sky_eff.add_shader("shaders/skybox.frag", GL_FRAGMENT_SHADER);
+
+	
 	
 
 	// Build effect
 	eff.build();
 	eff1.build();
 	sky_eff.build();
+	eff2.build();
 
 	// Set camera properties
 	cam.set_position(vec3(100.0f, 50.0f, 50.0f));
@@ -214,12 +229,17 @@ bool update(float delta_time) {
 		cam.set_position(vec3(0.0f, 50.0f, -110.0f));
 	}
 
+	// 7 - (0.0f, 10.0f, -110.0f)
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_7)) {
+		cam.set_position(vec3(0.0f, 10.0f, -110.0f));
+	}
+
 	// 4 - (-50.0f, 50.0f, -70.0f)
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_4)) {
 		cam.set_position(vec3(-50.0f, 50.0f, -90.0f));
 	}
 
-	// 5 - (-80.0f, 70.0f, 0.0f)
+	// 5 - (-90.0f, 70.0f, 0.0f)
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_5)) {
 		cam.set_position(vec3(-90.0f, 70.0f, 0.0f));
 	}
@@ -233,6 +253,13 @@ bool update(float delta_time) {
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_0)) {
 		cam.set_position(vec3(100.0f, 50.0f, 50.0f));
 	}
+
+	// 8 - (70.0f, 20.0f, 50.0f)
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_8)) {
+		cam.set_position(vec3(70.0f, 20.0f, 50.0f));
+	}
+
+	meshes["box"].get_transform().rotate(vec3(0.0f, half_pi<float>(), 0.0f) * delta_time);
 
 	meshes["pyramid"].get_transform().rotate(vec3(0.0f, half_pi<float>(), 0.0f) * delta_time);
 	meshes["pyramid1"].get_transform().rotate(vec3(0.0f, half_pi<float>(), 0.0f) * delta_time);
@@ -320,7 +347,7 @@ bool render() {
 			
 			auto m = e.second;
 			// Bind effect
-			renderer::bind(eff1);
+			renderer::bind(eff2);
 			
 			// Create MVP matrix
 			auto M = m.get_transform().get_transform_matrix();
@@ -328,7 +355,28 @@ bool render() {
 			auto P = cam.get_projection();
 			auto MVP = P * V * M;
 			// Set MVP matrix uniform
-			glUniformMatrix4fv(eff1.get_uniform_location("MVP"), 1, GL_FALSE, value_ptr(MVP));
+			glUniformMatrix4fv(eff2.get_uniform_location("MVP"), 1, GL_FALSE, value_ptr(MVP));
+
+			//glUniformMatrix4fv(eff.get_uniform_location("MVP"), 1, GL_FALSE, value_ptr(MVP));
+			// *********************************
+			// Set M matrix uniform
+			glUniformMatrix4fv(eff2.get_uniform_location("M"), 1, GL_FALSE, value_ptr(M));
+
+			// Set N matrix uniform - remember - 3x3 matrix 
+			mat3 normalmat = m.get_transform().get_normal_matrix();
+			glUniformMatrix3fv(eff2.get_uniform_location("N"), 1, GL_FALSE, value_ptr(normalmat));
+
+			renderer::bind(m.get_material(), "mat");
+			// Bind light
+			renderer::bind(light, "light");
+			// Bind texture
+			renderer::bind(tex, 0);
+
+			// Set tex uniform
+			glUniform1i(eff.get_uniform_location(" tex"), 0);
+
+			// Set eye position - Get this from active camera
+			glUniform3fv(eff.get_uniform_location("eye_pos"), 1, value_ptr(vec3(50.0f, 10.0f, 50.0f)));
 
 			// Bind and set texture
 			texture t = tex;
@@ -343,7 +391,7 @@ bool render() {
 			renderer::bind(t,0);
 			
 			// Set the uniform values for textures - use correct index
-			glUniform1i(eff1.get_uniform_location("tex"), 0);
+			glUniform1i(eff2.get_uniform_location("tex"), 0);
 			
 			// Render mesh
 		renderer::render(m);

@@ -208,13 +208,11 @@ bool load_content() {
 
 bool update(float delta_time) {
 	
-	
-
 	skybox.get_transform().position = cam.get_position();
 	// *********************************
 	// Use keyboard to change camera location
 		
-	// 1 - (80.0f, 50.0f, 0.0f)
+	// 1 - (120.0f, 30.0f, 0.0f)
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_1)) {
 		cam.set_position(vec3(120.0f, 30.0f, 0.0f));
 	}
@@ -224,7 +222,7 @@ bool update(float delta_time) {
 		cam.set_position(vec3(90.0f, 50.0f, -50.0f));
 	}
 	
-	// 3 - (0.0f, 50.0f, -80.0f)
+	// 3 - (0.0f, 50.0f, -110.0f)
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_3)) {
 		cam.set_position(vec3(0.0f, 50.0f, -110.0f));
 	}
@@ -234,7 +232,7 @@ bool update(float delta_time) {
 		cam.set_position(vec3(0.0f, 10.0f, -110.0f));
 	}
 
-	// 4 - (-50.0f, 50.0f, -70.0f)
+	// 4 - (-50.0f, 50.0f, -90.0f)
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_4)) {
 		cam.set_position(vec3(-50.0f, 50.0f, -90.0f));
 	}
@@ -249,7 +247,7 @@ bool update(float delta_time) {
 		cam.set_position(vec3(50.0f, 90.0f, 0.0f));
 	}
 
-	// 0 - (50, 50, 50) DEFAULT POSITION
+	// 0 - (100, 50, 50) DEFAULT POSITION
 	if (glfwGetKey(renderer::get_window(), GLFW_KEY_0)) {
 		cam.set_position(vec3(100.0f, 50.0f, 50.0f));
 	}
@@ -259,8 +257,20 @@ bool update(float delta_time) {
 		cam.set_position(vec3(70.0f, 20.0f, 50.0f));
 	}
 
+	// 9 - (50.0f, 20.0f, -70.0f)
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_9)) {
+		cam.set_position(vec3(50.0f, 20.0f, -70.0f));
+	}
+
+	// Q - (80.0f, 10.0f, 0.0f)
+	if (glfwGetKey(renderer::get_window(), GLFW_KEY_Q)) {
+		cam.set_position(vec3(60.0f, 10.0f, 0.0f));
+	}
+
+	// rotate the box mesh
 	meshes["box"].get_transform().rotate(vec3(0.0f, half_pi<float>(), 0.0f) * delta_time);
 
+	// rotate all the pyramids for each pillar
 	meshes["pyramid"].get_transform().rotate(vec3(0.0f, half_pi<float>(), 0.0f) * delta_time);
 	meshes["pyramid1"].get_transform().rotate(vec3(0.0f, half_pi<float>(), 0.0f) * delta_time);
 	meshes["pyramid2"].get_transform().rotate(vec3(0.0f, half_pi<float>(), 0.0f) * delta_time);
@@ -357,7 +367,6 @@ bool render() {
 			// Set MVP matrix uniform
 			glUniformMatrix4fv(eff2.get_uniform_location("MVP"), 1, GL_FALSE, value_ptr(MVP));
 
-			//glUniformMatrix4fv(eff.get_uniform_location("MVP"), 1, GL_FALSE, value_ptr(MVP));
 			// *********************************
 			// Set M matrix uniform
 			glUniformMatrix4fv(eff2.get_uniform_location("M"), 1, GL_FALSE, value_ptr(M));
